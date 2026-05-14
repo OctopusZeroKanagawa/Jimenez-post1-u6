@@ -1,16 +1,114 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Alm
-  Date: 13/5/26
-  Time: 23:18
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-    <title>Title</title>
+
+    <meta charset="UTF-8">
+
+    <title>
+
+        ${empty producto ? "Nuevo Producto" : "Editar Producto"}
+
+    </title>
+
+    <link rel="stylesheet"
+          href="<c:url value='/css/estilos.css'/>">
+
 </head>
+
 <body>
+
+<h1>
+
+    ${empty producto ? "Registrar Producto" : "Editar Producto"}
+
+</h1>
+
+<form method="post"
+      action="<c:url value='/productos'/>">
+
+    <c:if test="${not empty producto}">
+
+        <input type="hidden"
+               name="id"
+               value="${producto.id}">
+
+        <input type="hidden"
+               name="accion"
+               value="actualizar">
+
+    </c:if>
+
+    <c:if test="${empty producto}">
+
+        <input type="hidden"
+               name="accion"
+               value="guardar">
+
+    </c:if>
+
+    <label>
+
+        Nombre:
+
+        <input type="text"
+               name="nombre"
+               required
+               value="${producto.nombre}">
+
+    </label>
+
+    <label>
+
+        Categoría:
+
+        <input type="text"
+               name="categoria"
+               value="${producto.categoria}">
+
+    </label>
+
+    <label>
+
+        Precio:
+
+        <input type="number"
+               name="precio"
+               step="0.01"
+               min="0"
+               required
+               value="${producto.precio}">
+
+    </label>
+
+    <label>
+
+        Stock:
+
+        <input type="number"
+               name="stock"
+               min="0"
+               required
+               value="${producto.stock}">
+
+    </label>
+
+    <button type="submit">
+
+        ${empty producto ? "Guardar" : "Actualizar"}
+
+    </button>
+
+    <a href="<c:url value='/productos'/>">
+
+        Cancelar
+
+    </a>
+
+</form>
 
 </body>
 </html>
