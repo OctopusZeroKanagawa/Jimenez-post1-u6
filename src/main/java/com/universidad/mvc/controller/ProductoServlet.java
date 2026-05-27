@@ -14,216 +14,187 @@ import java.io.IOException;
 @WebServlet("/productos")
 public class ProductoServlet extends HttpServlet {
 
-    private final ProductoService service =
-            new ProductoService();
+    private final ProductoService service = new ProductoService();
 
     @Override
-    protected void doGet(HttpServletRequest req,
-                         HttpServletResponse resp)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws ServletException, IOException {
 
-        String accion = req.getParameter("accion");
+        String accion = request.getParameter("accion");
 
         if (accion == null) {
-
             accion = "listar";
         }
 
         switch (accion) {
 
             case "listar":
-
-                listar(req, resp);
-
+                listar(request, response);
                 break;
 
             case "formulario":
-
-                mostrarFormulario(req, resp);
-
+                mostrarFormulario(request, response);
                 break;
 
             case "editar":
-
-                mostrarEdicion(req, resp);
-
+                mostrarEdicion(request, response);
                 break;
 
             case "eliminar":
-
-                eliminar(req, resp);
-
+                eliminar(request, response);
                 break;
 
             default:
-
-                resp.sendError(404);
+                response.sendError(404);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        req.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
 
-        String accion =
-                req.getParameter("accion");
+        String accion = request.getParameter("accion");
 
         if ("guardar".equals(accion)) {
 
-            guardar(req, resp);
+            guardar(request, response);
 
         } else if ("actualizar".equals(accion)) {
 
-            actualizar(req, resp);
+            actualizar(request, response);
 
         } else {
 
-            resp.sendError(400);
+            response.sendError(400);
         }
     }
 
-    private void listar(HttpServletRequest req,
-                        HttpServletResponse resp)
+    private void listar(HttpServletRequest request,
+                        HttpServletResponse response)
             throws ServletException, IOException {
 
-        req.setAttribute(
+        request.setAttribute(
                 "productos",
                 service.obtenerTodos()
         );
 
-        String mensaje =
-                req.getParameter("mensaje");
+        String mensaje = request.getParameter("mensaje");
 
         if (mensaje != null) {
-
-            req.setAttribute("mensaje", mensaje);
+            request.setAttribute("mensaje", mensaje);
         }
 
         forward(
-                req,
-                resp,
+                request,
+                response,
                 "/WEB-INF/views/lista.jsp"
         );
     }
 
-    private void mostrarFormulario(
-            HttpServletRequest req,
-            HttpServletResponse resp)
+    private void mostrarFormulario(HttpServletRequest request,
+                                   HttpServletResponse response)
             throws ServletException, IOException {
 
         forward(
-                req,
-                resp,
+                request,
+                response,
                 "/WEB-INF/views/formulario.jsp"
         );
     }
 
-    private void mostrarEdicion(
-            HttpServletRequest req,
-            HttpServletResponse resp)
+    private void mostrarEdicion(HttpServletRequest request,
+                                HttpServletResponse response)
             throws ServletException, IOException {
 
         int id = Integer.parseInt(
-                req.getParameter("id")
+                request.getParameter("id")
         );
 
-        req.setAttribute(
-                "producto",
-                service.obtenerPorId(id)
-        );
+        Producto producto = service.obtenerPorId(id);
+
+        request.setAttribute("producto", producto);
 
         forward(
-                req,
-                resp,
+                request,
+                response,
                 "/WEB-INF/views/formulario.jsp"
         );
     }
 
-    private void guardar(
-            HttpServletRequest req,
-            HttpServletResponse resp)
+    private void guardar(HttpServletRequest request,
+                         HttpServletResponse response)
             throws IOException {
 
-        Producto producto =
-                extraerProducto(req, 0);
+        Producto producto = extraerProducto(request, 0);
 
         service.guardar(producto);
 
-        resp.sendRedirect(
-                req.getContextPath()
-                        + "/productos?mensaje=Producto+guardado+exitosamente"
+        response.sendRedirect(
+                request.getContextPath()
+                        + "/productos?mensaje=Producto+guardado+correctamente"
         );
     }
 
-    private void actualizar(
-            HttpServletRequest req,
-            HttpServletResponse resp)
+    private void actualizar(HttpServletRequest request,
+                            HttpServletResponse response)
             throws IOException {
 
         int id = Integer.parseInt(
-                req.getParameter("id")
+                request.getParameter("id")
         );
 
-        Producto producto =
-                extraerProducto(req, id);
+        Producto producto = extraerProducto(request, id);
 
         service.actualizar(producto);
 
-        resp.sendRedirect(
-                req.getContextPath()
+        response.sendRedirect(
+                request.getContextPath()
                         + "/productos?mensaje=Producto+actualizado"
         );
     }
 
-    private void eliminar(
-            HttpServletRequest req,
-            HttpServletResponse resp)
+    private void eliminar(HttpServletRequest request,
+                          HttpServletResponse response)
             throws IOException {
 
         int id = Integer.parseInt(
-                req.getParameter("id")
+                request.getParameter("id")
         );
 
         service.eliminar(id);
 
-        resp.sendRedirect(
-                req.getContextPath()
+        response.sendRedirect(
+                request.getContextPath()
                         + "/productos?mensaje=Producto+eliminado"
         );
     }
 
-    private Producto extraerProducto(
-            HttpServletRequest req,
-            int id) {
+    private Producto extraerProducto(HttpServletRequest request,
+                                     int id) {
 
         return new Producto(
-
                 id,
-
-                req.getParameter("nombre"),
-
-                req.getParameter("categoria"),
-
+                request.getParameter("nombre"),
+                request.getParameter("categoria"),
                 Double.parseDouble(
-                        req.getParameter("precio")
+                        request.getParameter("precio")
                 ),
-
                 Integer.parseInt(
-                        req.getParameter("stock")
+                        request.getParameter("stock")
                 )
         );
     }
 
-    private void forward(
-            HttpServletRequest req,
-            HttpServletResponse resp,
-            String path)
+    private void forward(HttpServletRequest request,
+                         HttpServletResponse response,
+                         String ruta)
             throws ServletException, IOException {
 
-        req.getRequestDispatcher(path)
-                .forward(req, resp);
+        request.getRequestDispatcher(ruta)
+                .forward(request, response);
     }
 }

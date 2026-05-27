@@ -7,25 +7,20 @@ import java.util.List;
 
 public class ProductoService {
 
-    private final ProductoDAO dao =
-            new ProductoDAO();
+    private final ProductoDAO dao = new ProductoDAO();
 
     public List<Producto> obtenerTodos() {
-
         return dao.findAll();
     }
 
     public Producto obtenerPorId(int id) {
-
         return dao.findById(id);
     }
 
     public void guardar(Producto producto) {
 
-        if (producto.getNombre() == null
-                || producto.getNombre()
-                .trim()
-                .isEmpty()) {
+        if (producto.getNombre() == null ||
+                producto.getNombre().trim().isEmpty()) {
 
             throw new IllegalArgumentException(
                     "El nombre es obligatorio."
@@ -55,7 +50,6 @@ public class ProductoService {
     }
 
     public void eliminar(int id) {
-
         dao.delete(id);
     }
 }

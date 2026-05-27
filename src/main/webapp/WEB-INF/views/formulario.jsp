@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -9,9 +12,9 @@
     <meta charset="UTF-8">
 
     <title>
-
-        ${empty producto ? "Nuevo Producto" : "Editar Producto"}
-
+        ${empty producto
+                ? 'Nuevo Producto'
+                : 'Editar Producto'}
     </title>
 
     <link rel="stylesheet"
@@ -21,94 +24,107 @@
 
 <body>
 
-<h1>
+<div class="contenedor-formulario">
 
-    ${empty producto ? "Registrar Producto" : "Editar Producto"}
+    <h1>
 
-</h1>
+        ${empty producto
+                ? 'Registrar Producto'
+                : 'Editar Producto'}
 
-<form method="post"
-      action="<c:url value='/productos'/>">
+    </h1>
 
-    <c:if test="${not empty producto}">
+    <form method="post"
+          action="<c:url value='/productos'/>">
 
-        <input type="hidden"
-               name="id"
-               value="${producto.id}">
+        <c:if test="${not empty producto}">
 
-        <input type="hidden"
-               name="accion"
-               value="actualizar">
+            <input type="hidden"
+                   name="id"
+                   value="${producto.id}">
 
-    </c:if>
+            <input type="hidden"
+                   name="accion"
+                   value="actualizar">
 
-    <c:if test="${empty producto}">
+        </c:if>
 
-        <input type="hidden"
-               name="accion"
-               value="guardar">
+        <c:if test="${empty producto}">
 
-    </c:if>
+            <input type="hidden"
+                   name="accion"
+                   value="guardar">
 
-    <label>
+        </c:if>
 
-        Nombre:
+        <label>
 
-        <input type="text"
-               name="nombre"
-               required
-               value="${producto.nombre}">
+            Nombre
 
-    </label>
+            <input type="text"
+                   name="nombre"
+                   required
+                   value="${producto.nombre}">
 
-    <label>
+        </label>
 
-        Categoría:
+        <label>
 
-        <input type="text"
-               name="categoria"
-               value="${producto.categoria}">
+            Categoría
 
-    </label>
+            <input type="text"
+                   name="categoria"
+                   value="${producto.categoria}">
 
-    <label>
+        </label>
 
-        Precio:
+        <label>
 
-        <input type="number"
-               name="precio"
-               step="0.01"
-               min="0"
-               required
-               value="${producto.precio}">
+            Precio
 
-    </label>
+            <input type="number"
+                   name="precio"
+                   step="0.01"
+                   min="0"
+                   required
+                   value="${producto.precio}">
 
-    <label>
+        </label>
 
-        Stock:
+        <label>
 
-        <input type="number"
-               name="stock"
-               min="0"
-               required
-               value="${producto.stock}">
+            Stock
 
-    </label>
+            <input type="number"
+                   name="stock"
+                   min="0"
+                   required
+                   value="${producto.stock}">
 
-    <button type="submit">
+        </label>
 
-        ${empty producto ? "Guardar" : "Actualizar"}
+        <div class="acciones">
 
-    </button>
+            <button type="submit">
 
-    <a href="<c:url value='/productos'/>">
+                ${empty producto
+                        ? 'Guardar'
+                        : 'Actualizar'}
 
-        Cancelar
+            </button>
 
-    </a>
+            <a class="btn-cancelar"
+               href="<c:url value='/productos'/>">
 
-</form>
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
 
 </body>
+
 </html>

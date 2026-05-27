@@ -1,8 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="fmt"
+           uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -18,94 +23,90 @@
 
 <body>
 
-<h1>Inventario de Productos</h1>
+<div class="contenedor">
 
-<c:if test="${not empty mensaje}">
+    <h1>Inventario de Productos</h1>
 
-    <p class="alert-success">
-            ${mensaje}
-    </p>
+    <c:if test="${not empty mensaje}">
+        <div class="mensaje">
+                ${mensaje}
+        </div>
+    </c:if>
 
-</c:if>
+    <a class="btn"
+       href="<c:url value='/productos?accion=formulario'/>">
 
-<a href="<c:url value='/productos?accion=formulario'/>">
+        + Nuevo Producto
+    </a>
 
-    + Nuevo Producto
+    <table>
 
-</a>
+        <thead>
 
-<table>
-
-    <thead>
-
-    <tr>
-
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Stock</th>
-        <th>Acciones</th>
-
-    </tr>
-
-    </thead>
-
-    <tbody>
-
-    <c:forEach var="p"
-               items="${productos}"
-               varStatus="s">
-
-        <tr class="${s.index % 2 == 0 ? 'par' : 'impar'}">
-
-            <td>${p.id}</td>
-
-            <td>
-                <c:out value="${p.nombre}"/>
-            </td>
-
-            <td>
-                <c:out value="${p.categoria}"/>
-            </td>
-
-            <td>
-
-                <fmt:formatNumber
-                        value="${p.precio}"
-                        type="currency"
-                        currencySymbol="$"/>
-
-            </td>
-
-            <td>${p.stock}</td>
-
-            <td>
-
-                <a href="<c:url value='/productos?accion=editar&id=${p.id}'/>">
-
-                    Editar
-
-                </a>
-
-                |
-
-                <a href="<c:url value='/productos?accion=eliminar&id=${p.id}'/>"
-                   onclick="return confirm('¿Eliminar ${p.nombre}?')">
-
-                    Eliminar
-
-                </a>
-
-            </td>
-
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
         </tr>
 
-    </c:forEach>
+        </thead>
 
-    </tbody>
+        <tbody>
 
-</table>
+        <c:forEach var="p"
+                   items="${productos}"
+                   varStatus="estado">
+
+            <tr class="${estado.index % 2 == 0 ? 'par' : 'impar'}">
+
+                <td>${p.id}</td>
+
+                <td>
+                    <c:out value="${p.nombre}"/>
+                </td>
+
+                <td>
+                    <c:out value="${p.categoria}"/>
+                </td>
+
+                <td>
+                    <fmt:formatNumber
+                            value="${p.precio}"
+                            type="currency"
+                            currencySymbol="$"/>
+                </td>
+
+                <td>${p.stock}</td>
+
+                <td>
+
+                    <a href="<c:url value='/productos?accion=editar&id=${p.id}'/>">
+                        Editar
+                    </a>
+
+                    |
+
+                    <a href="<c:url value='/productos?accion=eliminar&id=${p.id}'/>"
+                       onclick="return confirm('¿Eliminar ${p.nombre}?')">
+
+                        Eliminar
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </c:forEach>
+
+        </tbody>
+
+    </table>
+
+</div>
 
 </body>
+
 </html>
