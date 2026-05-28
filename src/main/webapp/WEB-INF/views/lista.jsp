@@ -1,13 +1,10 @@
+
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%@ taglib prefix="fmt"
-           uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.universidad.mvc.model.Producto" %>
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
@@ -17,7 +14,7 @@
     <title>Inventario de Productos</title>
 
     <link rel="stylesheet"
-          href="<c:url value='/css/estilos.css'/>">
+          href="${pageContext.request.contextPath}/css/estilos.css">
 
 </head>
 
@@ -27,14 +24,23 @@
 
     <h1>Inventario de Productos</h1>
 
-    <c:if test="${not empty mensaje}">
-        <div class="mensaje">
-                ${mensaje}
-        </div>
-    </c:if>
+    <%
+        String mensaje =
+                (String) request.getAttribute("mensaje");
+
+        if (mensaje != null) {
+    %>
+
+    <div class="mensaje">
+        <%= mensaje %>
+    </div>
+
+    <%
+        }
+    %>
 
     <a class="btn"
-       href="<c:url value='/productos?accion=formulario'/>">
+       href="${pageContext.request.contextPath}/productos?accion=formulario">
 
         + Nuevo Producto
     </a>
@@ -56,50 +62,47 @@
 
         <tbody>
 
-        <c:forEach var="p"
-                   items="${productos}"
-                   varStatus="estado">
+        <%
+            List<Producto> productos =
+                    (List<Producto>) request.getAttribute("productos");
 
-            <tr class="${estado.index % 2 == 0 ? 'par' : 'impar'}">
+            for (Producto p : productos) {
+        %>
 
-                <td>${p.id}</td>
+        <tr>
 
-                <td>
-                    <c:out value="${p.nombre}"/>
-                </td>
+            <td><%= p.getId() %></td>
 
-                <td>
-                    <c:out value="${p.categoria}"/>
-                </td>
+            <td><%= p.getNombre() %></td>
 
-                <td>
-                    <fmt:formatNumber
-                            value="${p.precio}"
-                            type="currency"
-                            currencySymbol="$"/>
-                </td>
+            <td><%= p.getCategoria() %></td>
 
-                <td>${p.stock}</td>
+            <td>$<%= p.getPrecio() %></td>
 
-                <td>
+            <td><%= p.getStock() %></td>
 
-                    <a href="<c:url value='/productos?accion=editar&id=${p.id}'/>">
-                        Editar
-                    </a>
+            <td>
 
-                    |
+                <a href="${pageContext.request.contextPath}/productos?accion=editar&id=<%= p.getId() %>">
 
-                    <a href="<c:url value='/productos?accion=eliminar&id=${p.id}'/>"
-                       onclick="return confirm('¿Eliminar ${p.nombre}?')">
+                    Editar
+                </a>
 
-                        Eliminar
-                    </a>
+                |
 
-                </td>
+                <a href="${pageContext.request.contextPath}/productos?accion=eliminar&id=<%= p.getId() %>"
+                   onclick="return confirm('¿Eliminar producto?')">
 
-            </tr>
+                    Eliminar
+                </a>
 
-        </c:forEach>
+            </td>
+
+        </tr>
+
+        <%
+            }
+        %>
 
         </tbody>
 
@@ -108,5 +111,4 @@
 </div>
 
 </body>
-
 </html>

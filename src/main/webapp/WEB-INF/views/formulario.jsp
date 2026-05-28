@@ -1,61 +1,59 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.universidad.mvc.model.Producto" %>
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <title>
-        ${empty producto
-                ? 'Nuevo Producto'
-                : 'Editar Producto'}
-    </title>
+    <title>Formulario</title>
 
     <link rel="stylesheet"
-          href="<c:url value='/css/estilos.css'/>">
+          href="${pageContext.request.contextPath}/css/estilos.css">
 
 </head>
 
 <body>
 
+<%
+    Producto producto =
+            (Producto) request.getAttribute("producto");
+
+    boolean editando =
+            producto != null;
+%>
+
 <div class="contenedor-formulario">
 
     <h1>
 
-        ${empty producto
-                ? 'Registrar Producto'
-                : 'Editar Producto'}
+        <%= editando
+                ? "Editar Producto"
+                : "Registrar Producto" %>
 
     </h1>
 
     <form method="post"
-          action="<c:url value='/productos'/>">
+          action="${pageContext.request.contextPath}/productos">
 
-        <c:if test="${not empty producto}">
+        <input type="hidden"
+               name="accion"
+               value="<%= editando ? "actualizar" : "guardar" %>">
 
-            <input type="hidden"
-                   name="id"
-                   value="${producto.id}">
+        <%
+            if (editando) {
+        %>
 
-            <input type="hidden"
-                   name="accion"
-                   value="actualizar">
+        <input type="hidden"
+               name="id"
+               value="<%= producto.getId() %>">
 
-        </c:if>
-
-        <c:if test="${empty producto}">
-
-            <input type="hidden"
-                   name="accion"
-                   value="guardar">
-
-        </c:if>
+        <%
+            }
+        %>
 
         <label>
 
@@ -64,7 +62,7 @@
             <input type="text"
                    name="nombre"
                    required
-                   value="${producto.nombre}">
+                   value="<%= editando ? producto.getNombre() : "" %>">
 
         </label>
 
@@ -74,7 +72,7 @@
 
             <input type="text"
                    name="categoria"
-                   value="${producto.categoria}">
+                   value="<%= editando ? producto.getCategoria() : "" %>">
 
         </label>
 
@@ -83,11 +81,11 @@
             Precio
 
             <input type="number"
-                   name="precio"
                    step="0.01"
                    min="0"
+                   name="precio"
                    required
-                   value="${producto.precio}">
+                   value="<%= editando ? producto.getPrecio() : "" %>">
 
         </label>
 
@@ -96,10 +94,10 @@
             Stock
 
             <input type="number"
-                   name="stock"
                    min="0"
+                   name="stock"
                    required
-                   value="${producto.stock}">
+                   value="<%= editando ? producto.getStock() : "" %>">
 
         </label>
 
@@ -107,14 +105,14 @@
 
             <button type="submit">
 
-                ${empty producto
-                        ? 'Guardar'
-                        : 'Actualizar'}
+                <%= editando
+                        ? "Actualizar"
+                        : "Guardar" %>
 
             </button>
 
             <a class="btn-cancelar"
-               href="<c:url value='/productos'/>">
+               href="${pageContext.request.contextPath}/productos">
 
                 Cancelar
             </a>
@@ -126,5 +124,4 @@
 </div>
 
 </body>
-
 </html>
