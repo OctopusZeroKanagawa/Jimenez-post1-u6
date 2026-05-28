@@ -48,24 +48,29 @@ El sistema permite registrar, consultar, editar y eliminar productos dentro de u
 
 ---
 
-# Estructura del Proyecto
+# Capturas del Sistema
 
-src/
- └── main/
-      ├── java/
-      │    └── com.universidad.mvc/
-      │         ├── controller/
-      │         ├── dao/
-      │         ├── model/
-      │         └── util/
-      │
-      └── webapp/
-           ├── css/
-           ├── WEB-INF/
-           │     └── views/
-           │           ├── lista.jsp
-           │           └── formulario.jsp
-           └── index.jsp
+## Listado de Productos
+
+![Listado de Productos](Capturas%20de%20pantalla/Captura%20de%20pantalla_20260528_100327.png)
+
+---
+
+## Registro de Productos
+
+![Registro de Productos](Capturas%20de%20pantalla/Captura%20de%20pantalla_20260528_100340.png)
+
+---
+
+## Edición de Productos
+
+![Edición de Productos](Capturas%20de%20pantalla/Captura%20de%20pantalla_20260528_100350.png)
+
+---
+
+## Eliminación de Productos
+
+![Eliminación de Productos](Capturas%20de%20pantalla/Captura%20de%20pantalla_20260528_100407.png)
 
 # Patrón MVC Implementado
 
